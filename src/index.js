@@ -44,11 +44,11 @@ let start = null
 let end = null
 let stationsOpen = []
 let aux = []
-let actualStation = null
+let actualStationLine = null
 let stationsClose = []
 
 // Inicio
-init(14, 1)
+init(1, 14)
 
 function init(initial, destiny) {
   if(initial > 14 || destiny > 14) return console.log('Estação inicial ou final não existe')
@@ -72,17 +72,18 @@ function AStar(root) {
   aux = stationsOpen.map(way => {
     if(Array.isArray(way[0])) return ([...way])
       
-    // calcular g(n) dos novos nós
     let calculateG = way.reduce((total, item, index, wayOriginal) => {
       if(!wayOriginal[index - 1] && wayOriginal[index - 1] !== 0) return total
         
       let station1 = wayOriginal[index - 1]
       let station2 = wayOriginal[index]
         
-      let adiction = changeStation(station1, station2) ? 4 : 0
+      let adiction = changeStationLine(station1, station2) ? 4 : 0
       
       return total + adiction + kmToTime(distances[station1][station2]) + kmToTime(allDistances[station1][station2])
     }, 0)
+
+    actualStationLine = null
 
     return ([[...way], calculateG.toFixed(1)])
   })
@@ -117,17 +118,16 @@ function kmToTime(km){
 }
 
 
-function changeStation(station1, station2) {
+function changeStationLine(station1, station2) {
   // função retorna true se a estação mudar
   let a = stations[station1].find(x => stations[station2].includes(x))
 
-  if(!actualStation){
-    actualStation = a;
-    // console.log('criando uma estação atual')
+  if(!actualStationLine){
+    actualStationLine = a;
     return false
   }
 
-  return actualStation !== a
+  return actualStationLine !== a
 }
 
 function formatString(finalWay) {
