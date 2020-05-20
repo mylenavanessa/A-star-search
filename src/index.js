@@ -46,7 +46,7 @@ let stationsOpen = []
 let aux = []
 let actualStationLine = null
 let stationsClose = []
-
+let count = 0
 // Inicio
 init(1, 14)
 
@@ -80,29 +80,37 @@ function AStar(root) {
         
       let adiction = changeStationLine(station1, station2) ? 4 : 0
       
-      return total + adiction + kmToTime(distances[station1][station2]) + kmToTime(allDistances[station1][station2])
-    }, 0)
+      return [total[0] + adiction + kmToTime(distances[station1][station2]), total[1] + adiction + kmToTime(distances[station1][station2]) + kmToTime(allDistances[station1][station2])]
+    }, [0, 0])
 
     actualStationLine = null
 
-    return ([[...way], calculateG.toFixed(1)])
+    return ([[...way], calculateG[0].toFixed(1), calculateG[1].toFixed(1)])
   })
+
+  console.log(aux, 'calculos')
     
     // ordenar desc
-    aux.sort((a, b) => b[1] - a[1])
+    aux.sort((a, b) => b[2] - a[2])
+
+  console.log(aux, 'ordenado')
 
     // pegar ultimo nó
     let auxSize = aux.length
 
     let smallCost = aux[auxSize - 1]
 
-    let smallCostSize = smallCost[0].length
+    let smallCostSize = smallCost.length
 
-    let actualRoot = smallCost[0][smallCostSize - 1]
+    let actualWay = smallCost[smallCostSize - 3]
+
+    let actualWaySize = actualWay.length
+
+    let actualRoot = actualWay[actualWaySize - 1]
 
     // retorna o caminho se o menor custo for o nó final
     if (actualRoot === end) return formatString(smallCost)
-
+    
     // se o nó final não for atual fecha nó e chama função recursiva
     stationsOpen = aux
     let newRoot = stationsOpen.pop()
@@ -119,15 +127,20 @@ function kmToTime(km){
 
 
 function changeStationLine(station1, station2) {
-  // função retorna true se a estação mudar
+  // função retorna true se a linha mudar
   let a = stations[station1].find(x => stations[station2].includes(x))
+  console.log(a)
 
   if(!actualStationLine){
     actualStationLine = a;
     return false
   }
+  if(actualStationLine !== a) {
+    actualStationLine = a
+    return true
+  }
 
-  return actualStationLine !== a
+  return false
 }
 
 function formatString(finalWay) {
