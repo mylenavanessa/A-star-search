@@ -47,6 +47,7 @@ let aux = []
 let actualStationLine = null
 let stationsClose = []
 let count = 0
+
 // Inicio
 init(1, 14)
 
@@ -68,32 +69,11 @@ function AStar(root) {
   let rootOriginal = root.length === 1 ? root : root[0]
   distances[indexDistances].map((item, index) => item !== 0 && index).forEach(item => (item || item === 0) && stationsOpen.push([ ...rootOriginal , item]))
 
-  // f(n) = g(n) + h(n) + adicionais de 4 minutos por troca de linha
-  aux = stationsOpen.map(way => {
-    if(Array.isArray(way[0])) return ([...way])
-      
-    let calculateG = way.reduce((total, item, index, wayOriginal) => {
-      if(!wayOriginal[index - 1] && wayOriginal[index - 1] !== 0) return total
-        
-      let station1 = wayOriginal[index - 1]
-      let station2 = wayOriginal[index]
-        
-      let adiction = changeStationLine(station1, station2) ? 4 : 0
-      
-      return [total[0] + adiction + kmToTime(distances[station1][station2]), total[1] + adiction + kmToTime(distances[station1][station2]) + kmToTime(allDistances[station1][station2])]
-    }, [0, 0])
+    // função para calculo de g(n) e h(n)
+    aux = calculator(stationsOpen)
 
-    actualStationLine = null
-
-    return ([[...way], calculateG[0].toFixed(1), calculateG[1].toFixed(1)])
-  })
-
-  console.log(aux, 'calculos')
-    
     // ordenar desc
     aux.sort((a, b) => b[2] - a[2])
-
-  console.log(aux, 'ordenado')
 
     // pegar ultimo nó
     let auxSize = aux.length
@@ -111,25 +91,48 @@ function AStar(root) {
     // retorna o caminho se o menor custo for o nó final
     if (actualRoot === end) return formatString(smallCost)
     
-    // se o nó final não for atual fecha nó e chama função recursiva
+    // se o nó final não for o atual 
     stationsOpen = aux
     let newRoot = stationsOpen.pop()
     stationsClose.push(newRoot)
-    // Função recursiva
-    AStar(newRoot)
+    AStar(newRoot) // Função recursiva
+}
+
+// função para calculo de g(n) e f(n) => [[<caminho>], <g(n)>, <h(n)>]
+function calculator(stationsOpen){
+  return stationsOpen.map(way => {
+    // verifica se tem caminho para calcular
+    if(Array.isArray(way[0])) return ([...way])
+      
+    // reduz o array de caminho em uma dupla => [g(n), h(n)]
+    let calculateG = way.reduce((total, item, index, wayOriginal) => {
+      if(!wayOriginal[index - 1] && wayOriginal[index - 1] !== 0) return total
+        
+      let station1 = wayOriginal[index - 1]
+      let station2 = wayOriginal[index]
+      
+      // verifica se houve mudança de linha
+      let adiction = changeStationLine(station1, station2) ? 4 : 0
+
+      return [total[0] + adiction + kmToTime(distances[station1][station2]), total[1] + adiction + kmToTime(distances[station1][station2]) + kmToTime(allDistances[station1][station2])]
+    }, [0, 0])
+
+    actualStationLine = null
+
+    return ([[...way], calculateG[0].toFixed(1), calculateG[1].toFixed(1)])
+  })
 }
 
 
+// converte distancia por tempo
 function kmToTime(km){
-  // calcular tempo gasto para troca de estações
   return (km/trainSpeed * 60)
 }
 
 
+// função retorna true se a linha mudar
 function changeStationLine(station1, station2) {
-  // função retorna true se a linha mudar
   let a = stations[station1].find(x => stations[station2].includes(x))
-  console.log(a)
 
   if(!actualStationLine){
     actualStationLine = a;
@@ -143,8 +146,8 @@ function changeStationLine(station1, station2) {
   return false
 }
 
+//O texto final
 function formatString(finalWay) {
-  //O texto final
   let stationOriginal = finalWay[0].map(item => item + 1)
 
   let frase =`Caminho: ${stationOriginal.join(' -> ')} | Tempo: ${finalWay[1]}m`
