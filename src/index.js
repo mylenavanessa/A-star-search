@@ -48,13 +48,15 @@ let actualStationLine = null
 let stationsClose = []
 
 // Inicio
-init(1, 14)
+function init() {
+  let initial = document.getElementById('num1')
+  let destiny = document.getElementById('num2')
+  let result = document.getElementById('res')
 
-function init(initial, destiny) {
-  if(initial > 14 || destiny > 14) return console.log('Estação inicial ou final não existe')
+  if(initial.value > 14 || destiny.value > 14 || initial.value <= 0 || destiny.value <= 0 ) return result.innerHTML = 'Estação inicial ou final não existe'
 
-  start = [initial - 1];
-  end = destiny-1;
+  start = [initial.value - 1];
+  end = destiny.value - 1;
 
   AStar(start)
 }
@@ -133,8 +135,9 @@ function changeStationLine(station1, station2) {
 function formatString(finalWay) {
   //O texto final
   let stationOriginal = finalWay[0].map(item => item + 1)
+  let result = document.getElementById('res')
 
-  let frase =`Caminho: ${stationOriginal.join(' -> ')} | Tempo: ${finalWay[1]}m`
+  text =` Caminho: ${stationOriginal.join(` \u{1F449} `)} | Tempo: ${finalWay[1]}m`
+  result.innerHTML = text
 
-  console.log(frase)
 }
