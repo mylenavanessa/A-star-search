@@ -11,7 +11,12 @@
 </head>
 
 <body>
-    <h1 id="title" >Projeto Busca A*</h1>
+
+    <div id="container-title">
+        <div id="title">
+            <h1>Projeto Busca A*</h1>
+        </div>
+    </div>
     <div id="container">
         <div id="container-img">
             <img id="img" src="assets/metro.png" />
@@ -19,12 +24,14 @@
         <div id="box-input">
             <h1 id="box-title">Escolha um estado do 1 até 14</h1>
             <p id="ipt1"> Digite o estado inicial: 
-                <input type="number" id="num1" >
+                <input type="number" id="num1" placeholder="1 até 14" >
             </p>
+            <div id="teste">
 
-            <p id="ipt2"> Digite o estado final: 
-                <input type="number" id="num2" />
-            </p>
+                <p id="ipt2"> Digite o estado final: 
+                    <input type="number" id="num2" placeholder="1 até 14" />
+                </p>
+            </div>
             <button id="button" onclick="init()">IMPRIMIR</button>
         </div>
         <div id="res"></div>

@@ -3,14 +3,18 @@ body{
     background-color: rgb(247, 167, 207);
 }
 
-#title{
+#container-title {
     display: flex;
+    flex-flow: row wrap;
     justify-content: center;
+    padding: 10px;
+  }
+
+#title{
     border: magenta 2px solid;
-    margin-left: 40%;
-    margin-right: 40%;
     background-color: snow;
     border-radius: 10px;
+    
 }
 
 #container{
@@ -34,7 +38,7 @@ body{
 
 
 #img{
-    width: 80%;
+    width: 70%;
 
 }
 
@@ -46,8 +50,8 @@ body{
     border-radius: 10px;
     display: flex;
     color: black;
-    margin-left: 15%;
-    margin-right: 15%;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 #box-title{
