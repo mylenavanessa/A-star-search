@@ -46,10 +46,14 @@ let stationsOpen = []
 let aux = []
 let actualStationLine = null
 let stationsClose = []
-let count = 0
 
 // Inicio
 function init() {
+  stationsOpen = []
+  aux = []
+  actualStationLine = null
+  stationsClose = []
+
   let initial = document.getElementById('num1')
   let destiny = document.getElementById('num2')
   let result = document.getElementById('res')
@@ -153,7 +157,6 @@ function formatString(finalWay) {
   let stationOriginal = finalWay[0].map(item => item + 1)
   let result = document.getElementById('res')
 
-  text =` Caminho: ${stationOriginal.join(` \u{1F449} `)} | Tempo: ${finalWay[1]}m`
+  text =`Caminho: ${stationOriginal.join(` -> `)} | Tempo: ${finalWay[1]}m`
   result.innerHTML = text
-
 }

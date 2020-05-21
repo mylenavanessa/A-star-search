@@ -14,7 +14,6 @@ body{
     border: magenta 2px solid;
     background-color: snow;
     border-radius: 10px;
-    
 }
 
 #container{
@@ -26,20 +25,16 @@ body{
     margin-right: 20%;
     padding: 2%;
     color: white;
-
-
 }
 
 #container-img{
     display: flex;
     justify-content: center;
-
 }
 
 
 #img{
     width: 70%;
-
 }
 
 #box-input{
